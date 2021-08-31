@@ -24,8 +24,32 @@ A project to visualize vibration data according to wind strength on the web by c
 
 
 ## model used
+- For classification, three machine learning methods were trained: GradientBoosting, LinearSVC, and Linear Regression.
 
-After classifying the wind strength using (cover_DL,cover_GB,cover_LinearSVC,cover_LR,motor_DL,motor_GB,motor_LinearSVC,motor_LR), the result of (high, medium, low) is output.
+### Machine Learning Model Test Results
+As a result of testing the machine learning model, in the case of GradientBossting, both the model using the data collected from the motor position and the model trained with the data collected from the cover position showed high performance. However, it was confirmed that the performance of the model trained with the motor position data in LinearSVC and Linear Regression was not good, while the model using the data collected from the cover position performed well.
+
+This phenomenon appears to have occurred because the vibration according to the wind strength was better reflected in the cover position than in the motor position of the fan.
+
+### Deep learning model training
+Machine learning performs well on well-refined data or simple data, but its performance deteriorates when there is a lot of data and more complex data. In addition, there is a disadvantage that a person has to manually purify the data. The deep learning model analyzes data by itself through a neural network without human intervention and shows high performance even on complex high-dimensional data.
+
+For this reason, research to solve various problems that were not previously solved by machine learning using deep learning is being conducted.
+
+In the case of the machine learning model, the data collected from the cover position was suitable for classification of wind strength, but the data collected from the motor position was not well classified. Therefore, we checked whether the problem is due to the limitations of machine learning or the problem of data through the deep learning model.
+
+The deep learning model for learning is implemented as follows
+
+![image](https://user-images.githubusercontent.com/88071262/131482632-a016bede-4b62-4219-98fa-a8d6a5fc8e75.png)
+
+#### Deep learning model training results
+- Motor position learning and test results
+![image](https://user-images.githubusercontent.com/88071262/131482806-4cdcc574-65c7-4692-a2e0-f5b8b78b3e56.png)
+
+- Cover position learning and test results
+![image](https://user-images.githubusercontent.com/88071262/131482950-28f4f5ab-7a49-4030-8c8c-8df8f9c71eaa.png)
+
+
 
 ## result
 
