@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vibration Data</title>
+        <script src="{{ url_for('static', filename='jquery-1.8.3.min.js') }}"></script>
+        <!--data.js 파일 -->
+        <script src="{{ url_for('static', filename='data.js') }}"></script>
+      <script type="text/javascript"></script>
+                <!-- Bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      
+      
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+    
+    <![endif]-->
+  </head>
+  <body>
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+{#        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+{#          <ul class="nav navbar-nav">#}
+{#            <li><a href="#">A link</a></li>#}
+{#          </ul>#}
+{#        </div><!-- /.navbar-collapse -->#}
+      </div>
+    </div>
+    <script src="/static/js/highcharts_angley.js"></script>
+
+    <p align="center"><font size=10 color=#4374D9><b><br>Vibration Data</br></font></b>
+    
+        <!--그래프 -->
+
+<div class="container-fluid" id="data-container"></div>
+
+<!--시간 출력-->
+
+<script id="test">
+                                              
+function fetchItems(item) {
+  return new Promise(function(resolve, reject) {
+     setTimeout(function(){
+         resolve();
+         },500)
+  });
+}
+
+
+async function printTime()
+{
+    var data = document.getElementById("data");
+    var maxdata = document.getElementById("maxdata");
+    var mindata = document.getElementById("mindata");
+    var Peak_valuedata = document.getElementById("Peak_valuedata");
+    var std_valuedata = document.getElementById("std_valuedata");
+    var skew_valuedata=document.getElementById("skew_valuedata");
+    var kurt_valuedata=document.getElementById("kurt_valuedata");
+    var abs_valuedata = document.getElementById("abs_valuedata");
+    var root_square_valuedata = document.getElementById("root_square_valuedata");
+    var pow_sum=0;//제곱의 합
+    var sum2=0;//분산표준편차구할때
+    var sum3=0;//왜도 구할때
+    var sum4=0;//첨도 구할때
+    var detectedObjects = []; //감지된 사람 저장 배열 
+    allRow="{{data}}"
+    
+     var arr=allRow.split(",")
+            if (arr.length > 100) { 
+            allRow = arr.slice(-60,); }
+            console.log("allRow",allRow) 
+    for (var singleRow = 0; singleRow < allRow.length; singleRow++) { 
+        collapse = allRow[singleRow] 
+        //console.log("collapse",collapse)
+        var line = 0; //저장된 데이터의 열 개수를 저장하기 위한 변수 
+        textIn=collapse
+        textLine = parseFloat(textIn); // 그래프 파싱을 위해 Int형 변환 
+        detectedObjects.push(textLine)
+        
+        data.innerHTML=allRow[singleRow];
+        //console.log("inputdata",allRow[singleRow])
+        
+        var item=detectedObjects;
+        //console.log("item",item)
+        item_cnt=item.length
+        var resultItems=await fetchItems(item[item_cnt]);
+        items=item.slice(0,singleRow+1)
+        var resultItems1=await fetchItems(items);
+        //최댓값
+            var max = items.reduce( function (previous, current) { 
+        	return previous > current ? previous:current;
+            });
+            console.log("max",max)
+            //최솟값
+            var min = items.reduce( function (previous, current) { 
+        	return previous > current ? current:previous;
+            });
+            console.log("min",min)
+            //최대-최소
+            var Peak_value=max-min;
+            console.log("Peak_value",Peak_value)
+            //표준편차
+            var sum = function(x,y) { return x+y; };
+            var square = function(x) {return x*x; };
+            var mean = items.reduce(sum)/item.length;
+            var deviations = items.map(function(x) { return x-mean; });
+            var std_value = Math.sqrt(deviations.map(square).reduce(sum)/(items.length-1)); // 표준편차 2
+            
+            //분산의 표준편차
+            sum2=sum2+(singleRow-mean)**2;
+            var v=sum2/item.length;
+            var s=v**0.5
+            
+            //왜도
+            sum3=sum3+(singleRow-mean)**3
+            var skew_value=sum3/(item.length*s**3)
+            //첨도
+            sum4=sum4+(singleRow-mean)**4
+            var kurt_value=sum4/(item.length*s**4)
+            
+            //절대값
+            var abs_value = Math.abs(item[singleRow])
+            //제곱의 평균의 루트
+            var pow = Math.pow(item[singleRow],2);//제곱
+            pow_sum=pow_sum+pow;//제곱의 합
+            var pow_sum_av=pow_sum/item.length;
+            var root_square_value=Math.sqrt(pow_sum_av)
+            
+            line++;
+            console.log(root_square_value)
+            
+            
+            maxdata.innerHTML=max;
+            mindata.innerHTML=min;
+            Peak_valuedata.innerHTML=Peak_value;
+            std_valuedata.innerHTML=std_value;
+            skew_valuedata.innerHTML=skew_value;
+            kurt_valuedata.innerHTML=kurt_value;
+            abs_valuedata.innerHTML=abs_value;
+            root_square_valuedata.innerHTML=root_square_value;}
+            
+        
+}
+   
+    
+
+printTime();
+setTimeout(fetchItems, 6000); // refresh every 60 seconds 
+window.onload = printTime;
+//{% for i in data%}{{i}}{% endfor %}
+</script>
+
+
+
+</head>
+
+<body>
+
+<table border=1 width=90% align=center>
+<tr>
+<td width=50% height=40><font size=5><b>
+        data:<div>
+        <span id="data"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    </td><td><font size=5><b>max_value:
+    <div>
+        <span id="maxdata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    </td></tr>
+<tr>
+<td height=40><font size=5><b>min_value:
+    <div>
+        <span id="mindata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    </td><td><font size=5><b>peak_value:
+        <div>
+        <span id="Peak_valuedata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    </td></tr>
+<tr>
+<td height=40><font size=5><b>std_value:
+        <div>
+        <span id="std_valuedata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    
+</td><td><font size=5><b>skew_value:
+ <div>
+        <span id="skew_valuedata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+</td></tr>
+<tr>
+<td height=40><font size=5><b><div id="result">kurt_value:
+ <div>
+        <span id="kurt_valuedata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    </td><td><font size=5><b>abs_value:
+    
+            <div>
+        <span id="abs_valuedata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    </td></tr>
+<tr>
+<td height=40><font size=5><b>root_square_value:
+            <div>
+        <span id="root_square_valuedata"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+</td></td></tr>
+ </table>
+
+<div id="test" value="abs"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+
+
+  </body>
+</html>

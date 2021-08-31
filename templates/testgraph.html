@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vibration Data</title>
+        <script src="{{ url_for('static', filename='jquery-1.8.3.min.js') }}"></script>
+        <!--data.js 파일 -->
+        <script src="{{ url_for('static', filename='data.js') }}"></script>
+		<script type="text/javascript"></script>
+		          <!-- Bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      
+      
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+    
+    <![endif]-->
+    
+<script id="test">
+                                              
+function fetchItems(item) {
+  return new Promise(function(resolve, reject) {
+     setTimeout(function(){
+         resolve();
+         },200)
+  });
+}
+
+
+async function printTime()
+{
+
+    
+    allRow1="{{data1}}"
+    allRow2="{{data2}}"
+    allRow3="{{data3}}"
+    allRow4="{{data4}}"
+    allRow5="{{data5}}"
+    allRow6="{{data6}}"
+    allRow7="{{data7}}"
+    allRow8="{{data8}}"
+    allRow9="{{data9}}"
+    
+    console.log("testdd",{{data1}})
+    var index=0;
+    //dlcover
+    var arr1=allRow1.split(',')
+    if (arr1.length > 100) { 
+        tallRow1 = arr1.slice(-60,); } 
+    else{
+        tallRow1=arr1}
+        
+    //dlmotor
+    console.log("allRow2",allRow2)
+    var arr2=allRow2.split(',')
+    if (arr2.length > 100) { 
+        tallRow2 = arr2.slice(-60,); } 
+    else{
+        tallRow2=arr2}
+        console.log("tallRow2",tallRow2)
+    
+    //result
+    console.log("allRow3",allRow3)
+    var arr3=allRow3.split(',')
+    console.log("cnt",arr3.length)
+    if (arr3.length > 100) { 
+        tallRow3 = arr3.slice(-540,); } 
+    else{
+        tallRow3=arr3}
+        console.log("tallRow3",tallRow3)
+        console.log("tallRow3",tallRow3[0])
+        console.log("tallRow3",tallRow3[8])
+        
+    //load_cover_GB
+    var arr4=allRow4.split(',')
+    if (arr4.length > 100) { 
+        tallRow4 = arr4.slice(-60,); } 
+    else{
+        tallRow4=arr4}
+        console.log("tallRow4",tallRow4)
+        
+    //load_cover_LinearSVC
+    var arr5=allRow5.split(',')
+    if (arr5.length > 100) { 
+        tallRow5 = arr5.slice(-60,); } 
+    else{
+        tallRow5=arr5}
+        console.log("tallFOW5",tallRow5)
+
+    //load_cover_LR
+    var arr6=allRow6.split(',')
+    if (arr6.length > 100) { 
+        tallRow6 = arr6.slice(-60,); } 
+    else{
+        tallRow6=arr6}
+
+    //load_motor_GB
+    var arr7=allRow7.split(',')
+    if (arr7.length > 100) { 
+        tallRow7 = arr7.slice(-60,); } 
+    else{
+        tallRow7=arr7}
+
+    //load_motor_LinearSVC
+    var arr8=allRow8.split(',')
+    if (arr8.length > 100) { 
+        tallRow8 = arr8.slice(-60,); } 
+    else{
+        tallRow8=arr8}
+        
+    //load_motor_LR
+    var arr9=allRow9.split(',')
+    if (arr9.length > 100) { 
+        tallRow9 = arr9.slice(-60,); } 
+    else{
+        tallRow9=arr9}
+        
+    for (var singleRow = 0; singleRow < tallRow1.length; singleRow++) { 
+    myarray1=[]
+    myarray2=[]
+    myarray3=[]
+    myarray4=[]
+    myarray5=[]
+    myarray6=[]
+    myarray7=[]
+    myarray8=[]
+    myarray9=[]
+
+
+    
+    if(singleRow % 3 == 0){
+        //dlcover
+        first=tallRow1[singleRow].split("[")
+        first=first[1]
+        console.log(singleRow,first)
+        myarray1.push(Number(first))
+        //dlmotor
+        first_dlmotor=tallRow2[singleRow].split("[")
+        first_dlmotor=first_dlmotor[1]
+        console.log(singleRow,first_dlmotor)
+        myarray2.push(Number(first_dlmotor))
+    }
+    else if(singleRow % 3 == 1){
+        second=tallRow1[singleRow]
+        console.log(singleRow,second)
+        myarray1.push(Number(second))
+        //dlmotor
+        second_dlmotor=tallRow2[singleRow]
+        console.log(singleRow,second_dlmotor)
+        myarray2.push(Number(second_dlmotor))
+    }
+    else{
+        third=tallRow1[singleRow].split("]")
+        third=third[0]
+        console.log(singleRow,third)
+        myarray1.push(Number(third))
+        
+        //dlmotor
+        third_dlmotor=tallRow2[singleRow].split("]")
+        third_dlmotor=third[0]
+        console.log(singleRow,third_dlmotor)
+        myarray2.push(Number(third_dlmotor))
+
+    }
+
+    var resultItems=await fetchItems(myarray3);
+    var resultItems=await fetchItems(myarray1);
+    //console.log("myarray1",myarray1)
+    const max = Math.max(...myarray1);
+    const res = [];
+    myarray1.forEach((item, index) => item === max ? res.push(index): null);
+    console.log("res",res) 
+    
+    
+    //dlmotor
+    //console.log("myarray2",myarray2)
+    var resultItems2=await fetchItems(myarray2);
+    const max2 = Math.max(...myarray2);
+    console.log("max2",max2)
+    const res2 = [];
+    myarray2.forEach((item, index) => item === max2 ? res2.push(index): null);
+
+    console.log("res2",res2)
+    
+
+    
+
+    
+    if(res==0){
+        data1.innerHTML=singleRow+".low";
+    }
+    else if(res==1){
+        data1.innerHTML=singleRow+".medium";
+    }
+    else{
+        data1.innerHTML=singleRow+".high";
+    }
+    console.log("Data",data1)
+
+//dlmotor
+
+    if(res2==0){
+        data2.innerHTML=singleRow+".low";
+    }
+    else if(res2==1){
+        data2.innerHTML=singleRow+".medium";
+    }
+    else{
+        data2.innerHTML=singleRow+".high";
+    }
+console.log("data2",data2)
+    
+    //cover_gb
+    //myarray4.push(Number(tallRow4[singleRow]))
+    //var resultItems4=await fetchItems(myarray4);
+    //console.log("teset",tallRow4[singleRow])
+    console.log("data4",data4)
+    if(tallRow4[singleRow]==0){
+        data4.innerHTML=singleRow+".low";
+    
+    }
+    else if(tallRow4[singleRow]==1){
+        data4.innerHTML=singleRow+".medium";
+    }
+    else{
+        data4.innerHTML=singleRow+".high";
+    }
+    
+    //load_cover_LinearSVC
+    //myarray5.push(Number(tallRow5[singleRow]))
+    //var resultItems5=await fetchItems(myarray5);
+console.log("data5",data5)
+    if(tallRow5[singleRow]==0){
+        data5.innerHTML=singleRow+".low";
+    
+    }
+    else if(tallRow5[singleRow]==1){
+        data5.innerHTML=singleRow+".medium";
+    }
+    else{
+        data5.innerHTML=singleRow+".high";
+    }
+
+        
+    //load_cover_LR
+    //myarray6.push(Number(tallRow6[singleRow]))
+    //var resultItems6=await fetchItems(myarray6);
+    console.log("data6",data6)
+    if(tallRow6[singleRow]==0){
+        data6.innerHTML=singleRow+".low";
+    
+    }
+    else if(tallRow6[singleRow]==1){
+        data6.innerHTML=singleRow+".medium";
+    }
+    else{
+        data6.innerHTML=singleRow+".high";
+    }
+    
+    //load_motor_GB
+    //myarray7.push(Number(tallRow7[singleRow]))
+    //var resultItems7=await fetchItems(myarray7);
+    if(tallRow7[singleRow]==0){
+        data7.innerHTML=singleRow+".low";
+    
+    }
+    else if(tallRow7[singleRow]==1){
+        data7.innerHTML=singleRow+".medium";
+    }
+    else{
+        data7.innerHTML=singleRow+".high";
+    }
+    
+    
+    //load_motor_LinearSVC
+    //myarray8.push(Number(tallRow8[singleRow]))
+    //var resultItems8=await fetchItems(myarray8);
+    if(tallRow8[singleRow]==0){
+        data8.innerHTML=singleRow+".low";
+    
+    }
+    else if(tallRow8[singleRow]==1){
+        data8.innerHTML=singleRow+".medium";
+    }
+    else{
+        data8.innerHTML=singleRow+".high";
+    }
+    
+    //load_motor_LR
+    //myarray9.push(Number(tallRow9[singleRow]))
+    //var resultItems9=await fetchItems(myarray9);
+    if(tallRow9[singleRow]==0){
+        data9.innerHTML=singleRow+".low";
+    
+    }
+    else if(tallRow9[singleRow]==1){
+        data9.innerHTML=singleRow+".medium";
+    }
+    else{
+        data9.innerHTML=singleRow+".high";
+    }  
+    
+    
+    }
+    
+
+
+
+}
+printTime();
+setTimeout(fetchItems, 60000); // refresh every 60 seconds 
+window.onload = printTime;
+
+</script>
+
+
+	</head>
+	<body>
+
+	 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+{#        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+{#          <ul class="nav navbar-nav">#}
+{#            <li><a href="#">A link</a></li>#}
+{#          </ul>#}
+{#        </div><!-- /.navbar-collapse -->#}
+      </div>
+    </div>
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container-fluid">
+        
+        <p align="center"><font size=10 color=#4374D9><b><br>Vibration Data</br></font></b>
+      </div>
+    </div>
+	<br><br>
+<table border=1 width=270 align=left>
+<tr><td></td></table>
+	<!-- ax -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='ax.html'">
+<img src="{{ url_for('static', filename='css/image/ax.png') }}" width=100 height=60>
+</table>
+</td>
+
+<!-- ay -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='ay.html'">
+<img src="{{ url_for('static', filename='css/image/ay.png') }}" width=100 height=60>
+</table>
+</td>
+
+<!-- az -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='az.html'">
+<img src="{{ url_for('static', filename='css/image/az.png') }}" width=100 height=60>
+</table>
+</td>
+
+<!-- wx -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='wx.html'">
+<img src="{{ url_for('static', filename='css/image/wx.png') }}" width=100 height=60>
+</table>
+</td>
+<!-- wy -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='wy.html'">
+<img src="{{ url_for('static', filename='css/image/wy.png') }}" width=100 height=60>
+</table>
+</td>
+<!-- wz -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='wz.html'">
+<img src="{{ url_for('static', filename='css/image/wz.png') }}" width=100 height=60>
+</table>
+</td>
+<!-- anglex -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='anglex.html'">
+<img src="{{ url_for('static', filename='css/image/anglex.png') }}" width=100 height=60>
+</table>
+</td>
+<!-- angley -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='angley.html'">
+<img src="{{ url_for('static', filename='css/image/angley.png') }}" width=100 height=60>
+</table>
+</td>
+
+<!-- anglez -->
+<table border=1 width=105 align=left>
+<tr><td>
+<button type="button" class="navyBtn" onClick="location.href='anglez.html'">
+<img src="{{ url_for('static', filename='css/image/anglez.png') }}" width=100 height=60>
+</table>
+
+</td>
+
+</table>
+
+
+<table border=1 width=90% align=center>
+<tr>
+<td colspan="2"><font size=5>data<div>
+        <span id="data3"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+</td>
+
+
+<tr>
+<td width=50% height=30><font size=8><b><center>ML</font>
+
+    </td><td width=50% height=30><font size=8><b><center>DL</font>
+    </td></tr>
+<tr>
+<td height=40><font size=5><b>load_cover_GB:
+<div>
+        <span id="data4"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    </td>
+    <td rowspan="3"><font size=5><b>load_cover_DL:
+            <div>
+        <span id="data1"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    </td></tr>
+<tr>
+<td height=40><font size=5><b>load_motor_GB: 
+        <div>
+        <span id="data7"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    
+</td><td>
+    
+</td></tr>
+
+<tr>
+<td height=40><font size=5><b><div id="result">load_cover_LR:
+ <div>
+        <span id="data6"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+    </td><td>
+    
+    </td></tr>
+<tr>
+<td height=40><font size=5><b>load_motor_LR:
+    <div>
+        <span id="data9"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+</td><td rowspan="3"><font size=5><b>load_motor_DL:
+            <div>
+        <span id="data2"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    </td></tr>
+<td height=40><font size=5><b>load_motor_LinearSVC:
+            <div>
+        <span id="data8"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+</td>
+<td height=40>
+</td></tr>
+
+<tr>
+<td height=40><font size=5><b>load_cover_LinearSVC:
+            <div>
+        <span id="data5"></span>
+        <asp:Label ID="Label1" Text="Label"></asp:Label>
+    </div>
+    
+</td><td></td>
+    
+</tr>
+
+ </table>
+
+<script>
+view_layer = function(val){
+  if(document.getElementById(val).style.display != ""){
+   document.getElementById(val).style.display = '';
+  }
+  else{
+   document.getElementById(val).style.display = 'none';
+  }
+ }
+</script>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	
+	
+	<table border=0 width=90% align=center>
+	<tr >
+	<td><a href onclick="view_layer('view'); return false;" style="cursor:pointer;">
+	<div class="container-fluid">
+	
+	
+<script src="{{ url_for('static', filename='highstock.js') }}"></script>
+<script src="{{ url_for('static', filename='highcharts-more.js') }}"></script>
+<script src="{{ url_for('static', filename='exporting.js') }}"></script>
+
+
+	</body>
+</html>
