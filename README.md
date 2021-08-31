@@ -6,7 +6,7 @@ A project to visualize vibration data according to wind strength on the web by c
 - jetson nano : Vibration data sent from Arduin Required when saving to DB and visualizing vibration data on the web
 - fan : vibrating data
 - Arduino : Vibration data collection
-- vibration sensor : A sensor that measures vibration data
+- vibration sensor : A sensor that measures vibration data(Vibration sensor used wit motion BWT61CL-E.)
 
 ![image](https://user-images.githubusercontent.com/88071262/131477452-5436621a-5cca-4d7d-a388-6d89ba47f260.png)
 
@@ -14,7 +14,7 @@ A project to visualize vibration data according to wind strength on the web by c
 <img width="526" alt="Screenshot 2021-08-30 154637" src="https://user-images.githubusercontent.com/88071262/131465653-eeb6a920-981c-4139-a216-21f51125c516.png">
 
 
-- 1.After attaching the vibration sensor to the fan, the corresponding vibration data of each x, y, and z axis of acceleration, angular velocity, and angle are collected by using a cable with Arduino.
+- 1. After attaching the vibration sensor to the fan, the corresponding vibration data of each x, y, and z axis of acceleration, angular velocity, and angle are collected by using a cable with Arduino.
 - 2. Transfer data from arduino to jetson nano through serial communication and save to s3
 - 3. Run flask server on jetson nano to load data from s3.
 - 4. After saving the data loaded from s3 in the form of an array, it is sent to HTML and JS.
@@ -22,8 +22,8 @@ A project to visualize vibration data according to wind strength on the web by c
 - 5. Outputs an asynchronous graph using the last 60 data of the data entered in JS and HTML, and displays the real-time value, maximum value, minimum value, maximum-minimum, standard deviation, skewness, kurtosis, mean of absolute values, and mean of squares. Output the root asynchronously.
 - 6. Loads the data of s3 where the wind strength is classified and outputs it asynchronously.
 
-
-## model used
+# model used
+## machine learning model training
 - For classification, three machine learning methods were trained: GradientBoosting, LinearSVC, and Linear Regression.
 
 ### Machine Learning Model Test Results
@@ -54,4 +54,7 @@ The deep learning model for learning is implemented as follows
 ## result
 
 https://user-images.githubusercontent.com/88071262/131480889-e7406e99-4b89-4079-8f48-c91cbf4bccd1.mp4
+
+- It collects data using a vibration sensor and predicts the wind strength in real time through machine learning and deep learning based on the collected data. The collected data and prediction results are visualized through a web page and a system has been implemented so that users can easily check them.
+- Through this, it has been verified that the vibration data is effective in predicting the state of the machine.
 
