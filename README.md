@@ -7,6 +7,7 @@ A project to visualize vibration data according to wind strength on the web by c
 - fan : vibrating data
 - Arduino : Vibration data collection
 - vibration sensor : A sensor that measures vibration data
+
 ![image](https://user-images.githubusercontent.com/88071262/131477452-5436621a-5cca-4d7d-a388-6d89ba47f260.png)
 
 ## project flow
