@@ -22,6 +22,35 @@ A project to visualize vibration data according to wind strength on the web by c
 5. Outputs an asynchronous graph using the last 60 data of the data entered in JS and HTML, and displays the real-time value, maximum value, minimum value, maximum-minimum, standard deviation, skewness, kurtosis, mean of absolute values, and mean of squares. Output the root asynchronously.
 6. Loads the data of s3 where the wind strength is classified and outputs it asynchronously.
 
+## process
+
+- Real-time data collection of vibration sensor
+: After attaching the vibration sensor to the fan, the corresponding vibration data of each x, y, and z axis of acceleration, angular velocity, and angle are collected by using a cable with Arduino.
+
+![image](https://user-images.githubusercontent.com/88071262/131484470-60551b3f-bde1-41fe-a1ce-987fc814082a.png)
+
+
+- Receive data from arduino to jetson nano through serial communication
+
+- Data received by jetson nano is stored in s3, and is stored in s3 as
+![image](https://user-images.githubusercontent.com/88071262/131484837-ad447c4d-4d7f-4838-976a-5321cbec66e2.png)
+
+- Visualization via web page
+: Flask server runs on jetson nano, and Python, HTML, and JS are used to create web pages.
+In python, the data stored in s3 is transmitted as HTML and JS, and the latest 60 data are read and visualized through a web page.
+
+: At the top, we created 9 buttons to view the acceleration, angular velocity, and angle for each of the x, y, and z axes.
+
+: At the bottom of the web page, the wind strength for the last 5 seconds predicted using three machine learning models and one deep learning model is output.
+
+![image](https://user-images.githubusercontent.com/88071262/131485049-fe9b97f8-c322-482f-9e0c-2267fb4b3ac4.png)
+
+: When you click the button, real-time data values and graphs are output, and in addition, 9 statistical values ​​for the latest 60 values are output.
+
+![image](https://user-images.githubusercontent.com/88071262/131485189-d6b63ec8-0ddf-4b24-b47b-0a22a4a81790.png)
+
+
+
 # model used
 ## machine learning model training
 - For classification, three machine learning methods were trained: GradientBoosting, LinearSVC, and Linear Regression.
